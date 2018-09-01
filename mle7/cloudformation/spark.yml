@@ -1,0 +1,71 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Resources for MLE7
+Parameters:
+  SSHKey:
+    Type: AWS::EC2::KeyPair::KeyName
+    Description: SSH key for accessing EMR instances
+  Subnet:
+    Type: AWS::EC2::Subnet::Id
+    Description: Subnet into which instances are placed
+Resources:
+  DataBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: mle7-data
+      Tags:
+        - Key: project
+          Value: ml-engineer
+  LogBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: mle7-logs
+      Tags:
+        - Key: project
+          Value: ml-engineer
+  Spark:
+    Type: AWS::EMR::Cluster
+    Properties:
+      Name: MLE7
+      JobFlowRole: !Ref EmrEc2InstanceProfile
+      ReleaseLabel: emr-5.17.0
+      LogUri: !Sub 's3://${LogBucket}'
+      ServiceRole: "EMR_DefaultRole"
+      Instances:
+        Ec2KeyName: !Ref SSHKey
+        Ec2SubnetId: !Ref Subnet
+        MasterInstanceGroup:
+          InstanceCount: 1
+          Market: ON_DEMAND
+          InstanceType: c5.2xlarge
+        CoreInstanceGroup:
+          InstanceCount: 3
+          Market: ON_DEMAND
+          InstanceType: c5.2xlarge
+  EmrEc2Role:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2008-10-17
+        Statement:
+          - Sid: ''
+            Effect: Allow
+            Principal:
+              Service: ec2.amazonaws.com
+            Action: 'sts:AssumeRole'
+      Path: /
+      ManagedPolicyArns:
+        - 'arn:aws:iam::aws:policy/service-role/AmazonElasticMapReduceforEC2Role'
+      Policies:
+        - PolicyName: Mle7S3
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action: "s3:*"
+                Resource: !Sub '${DataBucket.Arn}/*'
+  EmrEc2InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Path: /
+      Roles:
+        - !Ref EmrEc2Role

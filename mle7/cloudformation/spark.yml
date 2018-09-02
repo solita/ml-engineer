@@ -27,7 +27,7 @@ Resources:
     Properties:
       Name: MLE7
       JobFlowRole: !Ref EmrEc2InstanceProfile
-      ReleaseLabel: emr-5.17.0
+      ReleaseLabel: emr-5.16.0
       LogUri: !Sub 's3://${LogBucket}'
       ServiceRole: "EMR_DefaultRole"
       Instances:

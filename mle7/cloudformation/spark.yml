@@ -29,7 +29,7 @@ Resources:
       JobFlowRole: !Ref EmrEc2InstanceProfile
       ReleaseLabel: emr-5.16.0
       LogUri: !Sub 's3://${LogBucket}'
-      ServiceRole: "EMR_DefaultRole"
+      ServiceRole: !Ref EmrRole
       Instances:
         Ec2KeyName: !Ref SSHKey
         Ec2SubnetId: !Ref Subnet
@@ -41,6 +41,20 @@ Resources:
           InstanceCount: 3
           Market: ON_DEMAND
           InstanceType: c5.2xlarge
+  EmrRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2008-10-17
+        Statement:
+          - Sid: 'ServiceRole'
+            Effect: Allow
+            Principal:
+              Service: elasticmapreduce.amazonaws.com
+            Action: 'sts:AssumeRole'
+      Path: /
+      ManagedPolicyArns:
+        - 'arn:aws:iam::aws:policy/service-role/AmazonElasticMapReduceRole'
   EmrEc2Role:
     Type: AWS::IAM::Role
     Properties:

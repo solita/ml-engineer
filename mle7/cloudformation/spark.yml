@@ -45,9 +45,10 @@ Resources:
         MasterInstanceGroup:
           InstanceCount: 1
           Market: ON_DEMAND
-          InstanceType: c5.2xlarge
+          InstanceType: c5.xlarge
+          Name: Master
         CoreInstanceGroup:
-          InstanceCount: 3
+          InstanceCount: 2
           Market: ON_DEMAND
           InstanceType: c5.2xlarge
   EmrRole:

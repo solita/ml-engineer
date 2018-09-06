@@ -36,6 +36,9 @@ Resources:
       LogUri: !Sub 's3://${LogBucket}'
       ServiceRole: !Ref EmrRole
       VisibleToAllUsers: true
+      Tags:
+        - Key: project
+          Value: ml-engineer
       Instances:
         Ec2KeyName: !Ref SSHKey
         Ec2SubnetId: !Ref Subnet

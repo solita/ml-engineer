@@ -41,4 +41,6 @@ SparkSession available as 'spark'.
 4950  
 ```
 
+After starting Spark (say via `pyspark`), the management UI of a running Spark instance is available at http://localhost:4040/. Browsing it may give insight on the job execution of your code.
+
 There will also be a EMR cluster set up for running Spark. The cluster will be available via SSH from a later announced address. `pyspark` will also be available.

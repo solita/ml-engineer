@@ -51,6 +51,20 @@ Resources:
           InstanceCount: 2
           Market: ON_DEMAND
           InstanceType: c5.2xlarge
+          Name: Slave
+        AdditionalMasterSecurityGroups:
+          - !GetAtt MasterSecurityGroup.GroupId
+  MasterSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: mle7
+      GroupDescription: Access for MLE Exercise 7
+      SecurityGroupIngress:
+        - CidrIp: "87.236.156.202/32"
+          IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          Description: SSH access from Solita
   EmrRole:
     Type: AWS::IAM::Role
     Properties:

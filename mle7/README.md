@@ -1,8 +1,5 @@
 # Exercise 7
 
-"Harkka no 7"
--------------
-
 1. Background
 
 The purpose of this exercise is to teach you to use Spark for conducting distributed machine learning computation.

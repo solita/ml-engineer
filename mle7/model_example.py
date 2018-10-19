@@ -21,7 +21,13 @@ df_categorical = df_categorical.fillna('unknown')
 
 # combine the data frames, note that we drop duplicate variables
 df_all = df_numeric.join(df_categorical,df_numeric.Id==df_categorical.Id).drop(df_categorical.Id)
-df_all = df_all.join(df_date,df_all.Id==df_date.Id).drop(df_date.Id)
+# combine the data frames, note that we drop duplicate variables
+df_all = df_numeric \
+    .join(df_categorical,df_numeric.Id==df_categorical.Id) \
+    .drop(df_categorical.Id) \
+    .join(df_date,df_all.Id==df_date.Id) \
+    .drop(df_date.Id)
+
 
 # Imputate numerical variables. We use median for imputation, though it is likely not
 # really the smartest choice here, especially with the date variables.
